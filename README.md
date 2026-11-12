@@ -41,4 +41,11 @@ Software engineering students, IT professionals, project teams, and individual u
 | **Database**         | PostgreSQL                                                                                              |
 | **DevOps and tools** | Docker, Docker Compose, Git, GitHub (repository and Project board), Postman (API testing)               |
 
+## 10. Project Management Plan
+
+- **GitHub repository:** https://github.com/rafael17cordeiro/tasknova
+- **GitHub Project board:** https://github.com/users/rafael17cordeiro/projects/5/views/1
+
+> This section will be completed with milestones, branch strategy and task breakdown in Milestone 4.
+
 > The remaining sections (7 to 13) will be added progressively as the project evolves.
