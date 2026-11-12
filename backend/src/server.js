@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import pool from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
 
 // Carrega as variáveis do ficheiro .env
 dotenv.config();
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 3000;
 // Middlewares globais
 app.use(cors());
 app.use(express.json());
+app.use("/api/auth", authRoutes);
 
 // Rota de teste para confirmar que o servidor está a funcionar
 app.get("/api/health", (req, res) => {
