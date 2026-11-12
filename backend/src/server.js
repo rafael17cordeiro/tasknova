@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import pool from "./config/db.js";
 
 // Carrega as variáveis do ficheiro .env
 dotenv.config();
@@ -17,6 +18,25 @@ app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok", message: "TaskNova API is running" });
 });
 
-app.listen(PORT, () => {
+// Rota que confirma também a ligação à base de dados
+app.get("/api/health/db", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT NOW() AS now");
+    res.status(200).json({ status: "ok", dbTime: result.rows[0].now });
+  } catch (error) {
+    console.error("Erro na ligação à base de dados:", error.message);
+    res
+      .status(500)
+      .json({ status: "error", message: "Database connection failed" });
+  }
+});
+
+app.listen(PORT, async () => {
   console.log(`Servidor a correr na porta ${PORT}`);
+  try {
+    await pool.query("SELECT 1");
+    console.log("Ligação à base de dados estabelecida com sucesso");
+  } catch (error) {
+    console.error("Falha ao ligar à base de dados:", error.message);
+  }
 });
