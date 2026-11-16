@@ -41,6 +41,67 @@ Software engineering students, IT professionals, project teams, and individual u
 | **Database**         | PostgreSQL                                                                                              |
 | **DevOps and tools** | Docker, Docker Compose, Git, GitHub (repository and Project board), Postman (API testing)               |
 
+## 8. Data Model
+
+The application uses a relational PostgreSQL database with three entities. A user owns many projects, and a project contains many tasks. Deleting a project or a user removes the dependent records (`ON DELETE CASCADE`).
+
+```mermaid
+erDiagram
+    USERS ||--o{ PROJECTS : owns
+    PROJECTS ||--o{ TASKS : contains
+
+    USERS {
+        int id PK
+        varchar name
+        varchar email UK
+        varchar password_hash
+        timestamp created_at
+    }
+    PROJECTS {
+        int id PK
+        int user_id FK
+        varchar name
+        timestamp created_at
+    }
+    TASKS {
+        int id PK
+        int project_id FK
+        varchar title
+        text description
+        varchar status
+        varchar priority
+        date deadline
+        timestamp created_at
+    }
+```
+
+| Entity     | Key fields                                                                                                                                                           |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `users`    | `id`, `name`, `email` (unique), `password_hash`, `created_at`                                                                                                        |
+| `projects` | `id`, `user_id` (FK), `name`, `created_at`                                                                                                                           |
+| `tasks`    | `id`, `project_id` (FK), `title`, `description`, `status` (`backlog`, `todo`, `in_progress`, `done`), `priority` (`low`, `medium`, `high`), `deadline`, `created_at` |
+
+## 9. API Scope
+
+All endpoints are prefixed with `/api`. Every endpoint except register and login requires the header `Authorization: Bearer <token>`.
+
+| Method | Endpoint                     | Description                                                       | Auth |
+| ------ | ---------------------------- | ----------------------------------------------------------------- | ---- |
+| POST   | `/auth/register`             | Register a new user                                               | No   |
+| POST   | `/auth/login`                | Log in and receive a JWT                                          | No   |
+| GET    | `/auth/me`                   | Get the authenticated user                                        | Yes  |
+| GET    | `/projects`                  | List the user's projects                                          | Yes  |
+| POST   | `/projects`                  | Create a project                                                  | Yes  |
+| DELETE | `/projects/:id`              | Delete a project and its tasks                                    | Yes  |
+| GET    | `/projects/:projectId/tasks` | List tasks of a project (filters: `status`, `priority`, `search`) | Yes  |
+| POST   | `/projects/:projectId/tasks` | Create a task in a project                                        | Yes  |
+| PUT    | `/tasks/:id`                 | Update a task (partial update)                                    | Yes  |
+| DELETE | `/tasks/:id`                 | Delete a task                                                     | Yes  |
+
+A Postman collection with example requests is available in [`docs/TaskNova.postman_collection.json`](docs/TaskNova.postman_collection.json).
+
+--- |
+
 ## 10. Project Management Plan
 
 - **GitHub repository:** https://github.com/rafael17cordeiro/tasknova
