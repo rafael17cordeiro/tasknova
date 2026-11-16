@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import api from '../api/axios';
-import { AuthContext } from './authContext';
+import { AuthContext } from './auth-context';
 
 // Lê o utilizador guardado, com proteção contra dados corrompidos
 const loadStoredUser = () => {
