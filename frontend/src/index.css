@@ -1,1 +1,61 @@
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/space-grotesk";
 @import "tailwindcss";
+
+@theme {
+  /* Tipos de letra */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    "Space Grotesk Variable", "Inter Variable", ui-sans-serif, sans-serif;
+
+  /* Azul elétrico (cor principal) */
+  --color-primary-50: #eef4ff;
+  --color-primary-100: #dbe7ff;
+  --color-primary-200: #bcd3ff;
+  --color-primary-300: #8db4ff;
+  --color-primary-400: #5a8bff;
+  --color-primary-500: #2f66ff;
+  --color-primary-600: #1a4df0;
+  --color-primary-700: #153cc4;
+  --color-primary-800: #16349c;
+  --color-primary-900: #162f7a;
+
+  /* Ciano (cor de realce) */
+  --color-accent-300: #67e8f9;
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+
+  /* Superfícies e texto */
+  --color-canvas: #f5f8ff;
+  --color-surface: #ffffff;
+  --color-ink: #0b1220;
+  --color-ink-muted: #5b6785;
+  --color-line: #e3e9f5;
+
+  /* Estados */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
+  /* Sombras */
+  --shadow-card:
+    0 1px 2px rgb(16 24 40 / 0.04), 0 8px 24px -8px rgb(47 102 255 / 0.14);
+  --shadow-glow: 0 0 0 4px rgb(47 102 255 / 0.15);
+}
+
+/* Estilos base aplicados a toda a aplicação */
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+}
