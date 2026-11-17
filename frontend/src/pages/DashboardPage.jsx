@@ -6,6 +6,8 @@ import { useAuth } from '../hooks/useAuth';
 import Sidebar from '../components/Sidebar';
 import CreateProjectModal from '../components/CreateProjectModal';
 import ConfirmModal from '../components/ConfirmModal';
+import TaskBoard from '../components/TaskBoard';
+
 
 export default function DashboardPage() {
     const { user, logout } = useAuth();
@@ -84,12 +86,7 @@ export default function DashboardPage() {
             {/* Main Container */}
             <main className="flex-1 p-8">
                 {selectedProject ? (
-                    <div>
-                        <h1 className="text-3xl font-bold">{selectedProject.name}</h1>
-                        <p className="text-ink-muted mt-2">
-                            As tarefas deste projeto vão aparecer aqui no próximo passo.
-                        </p>
-                    </div>
+                    <TaskBoard key={selectedProject.id} project={selectedProject} />
                 ) : (
                     <div className="h-full flex flex-col items-center justify-center text-center text-ink-muted">
                         <FolderOpen size={48} className="mb-4 text-primary-300" />
