@@ -140,24 +140,30 @@ export const updateTask = async (req, res) => {
       return res.status(400).json({ message: "Invalid priority" });
     }
 
-    // COALESCE mantém o valor atual quando o campo não é enviado.
     // O JOIN com projects garante que a tarefa pertence ao utilizador.
+    // Para description e deadline, um parâmetro booleano indica se o campo foi enviado:
+    // assim "não enviado" mantém o valor e "enviado vazio" limpa-o (NULL).
+    const descriptionSent = description !== undefined;
+    const deadlineSent = deadline !== undefined;
+
     const result = await pool.query(
       `UPDATE tasks t
        SET title = COALESCE($1, t.title),
-           description = COALESCE($2, t.description),
-           status = COALESCE($3, t.status),
-           priority = COALESCE($4, t.priority),
-           deadline = COALESCE($5, t.deadline)
+           description = CASE WHEN $2::boolean THEN $3 ELSE t.description END,
+           status = COALESCE($4, t.status),
+           priority = COALESCE($5, t.priority),
+           deadline = CASE WHEN $6::boolean THEN $7::date ELSE t.deadline END
        FROM projects p
-       WHERE t.id = $6 AND t.project_id = p.id AND p.user_id = $7
+       WHERE t.id = $8 AND t.project_id = p.id AND p.user_id = $9
        RETURNING t.id, t.project_id, t.title, t.description, t.status, t.priority, t.deadline, t.created_at`,
       [
         title !== undefined ? title.trim() : null,
-        description !== undefined ? description : null,
+        descriptionSent,
+        descriptionSent && description ? description.trim() || null : null,
         status ?? null,
         priority ?? null,
-        deadline ?? null,
+        deadlineSent,
+        deadlineSent && deadline ? deadline : null,
         taskId,
         req.userId,
       ],

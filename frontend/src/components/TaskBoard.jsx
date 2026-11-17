@@ -6,6 +6,7 @@ import { STATUSES, PRIORITIES } from '../constants';
 import TaskRow from './TaskRow';
 import TaskModal from './TaskModal';
 import ConfirmModal from './ConfirmModal';
+import { getErrorMessage } from '../utils/getErrorMessage';
 
 const selectClass =
     'rounded-lg border border-line bg-surface px-3 py-2 text-sm outline-none focus:border-primary-500 focus:shadow-glow transition';
@@ -95,7 +96,7 @@ export default function TaskBoard({ project }) {
             await reload();
             return true;
         } catch (error) {
-            toast.error(error.response?.data?.message ?? 'Não foi possível guardar a tarefa');
+            toast.error(getErrorMessage(error, 'Não foi possível guardar a tarefa'));
             return false;
         }
     };
@@ -105,8 +106,8 @@ export default function TaskBoard({ project }) {
             await api.put(`/tasks/${task.id}`, { status: newStatus });
             await reload();
             toast.success('Estado atualizado');
-        } catch {
-            toast.error('Não foi possível atualizar o estado');
+        } catch (error) {
+            toast.error(getErrorMessage(error, 'Não foi possível atualizar o estado'));
         }
     };
 

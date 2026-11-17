@@ -7,7 +7,7 @@ import Sidebar from '../components/Sidebar';
 import CreateProjectModal from '../components/CreateProjectModal';
 import ConfirmModal from '../components/ConfirmModal';
 import TaskBoard from '../components/TaskBoard';
-
+import { getErrorMessage } from '../utils/getErrorMessage';
 
 export default function DashboardPage() {
     const { user, logout } = useAuth();
@@ -43,8 +43,8 @@ export default function DashboardPage() {
             setSelectedId(data.project.id);
             toast.success('Projeto criado');
             return true;
-        } catch {
-            toast.error('Não foi possível criar o projeto');
+        } catch (error) {
+            toast.error(getErrorMessage(error, 'Não foi possível criar o projeto'));
             return false;
         }
     }, []);
