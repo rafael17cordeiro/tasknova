@@ -139,11 +139,6 @@ A Postman collection with example requests is available in [`docs/TaskNova.postm
 - **GitHub repository:** https://github.com/rafael17cordeiro/tasknova
 - **GitHub Project board:** https://github.com/users/rafael17cordeiro/projects/5/views/1
 
-## 10. Project Management Plan
-
-- **GitHub repository:** https://github.com/rafael17cordeiro/tasknova
-- **GitHub Project board:** O_TEU_LINK_DO_QUADRO
-
 ### Milestones
 
 | Milestone                    | Tag  | Scope                                                                                                                                  |
