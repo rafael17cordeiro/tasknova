@@ -155,3 +155,82 @@ Development was done on the `main` branch with small, frequent commits following
 ### Task breakdown
 
 Work was tracked on the Kanban board (`Todo`, `In Progress`, `Done`) with one card per task, grouped by milestone (M0 to M4).
+
+## 11. Testing
+
+### Backend API
+
+All endpoints were tested manually with **Postman**. The exported collection is in [`docs/TaskNova.postman_collection.json`](docs/TaskNova.postman_collection.json). The `Login` request stores the JWT in an environment variable that the other requests reuse.
+
+### Frontend
+
+The frontend was tested manually in the browser, following each core functionality end to end (registration, login, project and task management, filters and logout).
+
+### Example test cases
+
+| #   | Test case                                                | Expected result                                     | Result |
+| --- | -------------------------------------------------------- | --------------------------------------------------- | ------ |
+| 1   | Register with a new email                                | `201`, user and token returned                      | Passed |
+| 2   | Register with an existing email                          | `400`, `Email already registered`                   | Passed |
+| 3   | Login with wrong password                                | `401`, `Invalid credentials`                        | Passed |
+| 4   | `GET /auth/me` without token                             | `401`, `Not authorized: token missing`              | Passed |
+| 5   | Create a project with an empty name                      | `400`, name required                                | Passed |
+| 6   | Delete a project that does not exist                     | `404`, `Project not found`                          | Passed |
+| 7   | Update a task with an invalid status                     | `400`, `Invalid status`                             | Passed |
+| 8   | Filter tasks by `priority=high`                          | Only high-priority tasks returned                   | Passed |
+| 9   | Submit the login form with empty fields                  | Validation messages, no request sent                | Passed |
+| 10  | Delete a project that has tasks                          | Project and its tasks removed (`ON DELETE CASCADE`) | Passed |
+| 11  | Reload the page while logged in                          | Session is kept                                     | Passed |
+| 12  | Clone the repository and run `docker compose up --build` | Application works at `http://localhost:8080`        | Passed |
+
+### Limitations of the testing
+
+No automated unit or integration tests were written. Adding them (for example Jest with Supertest for the API and Vitest with React Testing Library for the frontend) is listed under future improvements.
+
+## 13. Final Documentation
+
+### Purpose
+
+TaskNova helps individuals and small teams organize their work into projects and tasks, with priorities, deadlines and statuses, in a single, clean workspace.
+
+### Features
+
+- User registration and login with JWT authentication
+- Private workspace per user (users only see their own data)
+- Create and delete projects in a sidebar
+- Create, edit and delete tasks with title, description, priority, status and deadline
+- Quick status change directly from the task list
+- Search by title and filters by status and priority
+- Overdue deadlines highlighted
+- Custom modals and toast notifications (no `alert` or `confirm`)
+- Client-side and server-side validation
+- Full application in Docker with a single command
+
+### Screenshots
+
+| Login                                | Dashboard                                    |
+| ------------------------------------ | -------------------------------------------- |
+| ![Login](docs/screenshots/login.png) | ![Dashboard](docs/screenshots/dashboard.png) |
+
+| Task modal                                     | Filters                                  |
+| ---------------------------------------------- | ---------------------------------------- |
+| ![Task modal](docs/screenshots/task-modal.png) | ![Filters](docs/screenshots/filters.png) |
+
+### Limitations
+
+- No automated tests (manual testing only).
+- The JWT is stored in `localStorage`, which is exposed to XSS attacks; `httpOnly` cookies would be more secure.
+- No password recovery, email verification or login rate limiting.
+- No project renaming and no pagination of tasks.
+- The application runs over HTTP only; a production deployment would need HTTPS.
+- Server error messages are in English while the interface is in Portuguese.
+- The interface language is fixed (no internationalization).
+
+### Future improvements
+
+- Automated tests (Jest, Supertest, Vitest, React Testing Library) and a CI pipeline with GitHub Actions
+- Kanban drag-and-drop view and task pagination
+- Shared projects and role-based access for teams
+- Password reset by email and rate limiting
+- Dark mode toggle
+- Deployment to a cloud provider with HTTPS
