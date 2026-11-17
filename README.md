@@ -41,6 +41,38 @@ Software engineering students, IT professionals, project teams, and individual u
 | **Database**         | PostgreSQL                                                                                              |
 | **DevOps and tools** | Docker, Docker Compose, Git, GitHub (repository and Project board), Postman (API testing)               |
 
+## 7. System Architecture
+
+TaskNova follows a classic three-tier architecture: a React single-page application (frontend), a REST API built with Express (backend) and a PostgreSQL relational database. The three tiers run as separate containers orchestrated with Docker Compose.
+
+```mermaid
+flowchart LR
+    U[User's browser] -->|HTTP :8080| F[Frontend<br/>Nginx + React SPA]
+    U -->|REST/JSON :3000<br/>Bearer JWT| B[Backend<br/>Node.js + Express]
+    B -->|SQL via pg :5432| D[(PostgreSQL)]
+```
+
+| Aspect             | Description                                                                                                                                                                                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Frontend**       | React SPA built with Vite and styled with Tailwind CSS. React Router handles the pages (`/login`, `/register`, `/`). The compiled static files are served by Nginx, which falls back to `index.html` so deep links work.                                              |
+| **Backend**        | Express REST API organized in `routes/`, `controllers/`, `middleware/` and `config/`. Controllers hold the business logic and use parameterized SQL queries.                                                                                                          |
+| **Database**       | PostgreSQL 16 with three related tables (see section 8). The schema is created automatically on first start through `docker-entrypoint-initdb.d`.                                                                                                                     |
+| **Communication**  | The browser calls the API directly over HTTP using JSON. CORS is enabled on the backend.                                                                                                                                                                              |
+| **Authentication** | Passwords are hashed with `bcryptjs`. On login the server issues a signed JWT (7 days). The frontend stores it in `localStorage` and an Axios interceptor sends it in the `Authorization: Bearer` header. A `protect` middleware validates it on every private route. |
+| **Authorization**  | Every project and task query is filtered by the authenticated user, so users can only access their own data.                                                                                                                                                          |
+| **Deployment**     | Docker Compose runs three containers (`db`, `backend`, `frontend`). The database uses a named volume for persistence and a health check; the backend starts only after the database is healthy.                                                                       |
+
+### Main modules
+
+| Module                                                  | Responsibility                                                                         |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `AuthContext` / `useAuth`                               | Shares the logged-in user and the login, register and logout functions                 |
+| `ProtectedRoute`                                        | Redirects unauthenticated users to `/login`                                            |
+| `Sidebar`                                               | Lists, creates, selects and deletes projects                                           |
+| `TaskBoard`                                             | Toolbar (search and filters) and task list with create, edit, status change and delete |
+| `Modal` family                                          | Custom modals (`Modal`, `ConfirmModal`, `CreateProjectModal`, `TaskModal`)             |
+| `authController`, `projectController`, `taskController` | Backend business logic                                                                 |
+
 ## 8. Data Model
 
 The application uses a relational PostgreSQL database with three entities. A user owns many projects, and a project contains many tasks. Deleting a project or a user removes the dependent records (`ON DELETE CASCADE`).
@@ -107,6 +139,24 @@ A Postman collection with example requests is available in [`docs/TaskNova.postm
 - **GitHub repository:** https://github.com/rafael17cordeiro/tasknova
 - **GitHub Project board:** https://github.com/users/rafael17cordeiro/projects/5/views/1
 
-> This section will be completed with milestones, branch strategy and task breakdown in Milestone 4.
+## 10. Project Management Plan
 
-> The remaining sections (7 to 13) will be added progressively as the project evolves.
+- **GitHub repository:** https://github.com/rafael17cordeiro/tasknova
+- **GitHub Project board:** O_TEU_LINK_DO_QUADRO
+
+### Milestones
+
+| Milestone                    | Tag  | Scope                                                                                                                                  |
+| ---------------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| M1: Initialization           | `C0` | Concept, requirements, technology stack, repository and Kanban board                                                                   |
+| M2: Backend                  | `M2` | Express server, PostgreSQL in Docker, relational schema, JWT authentication, REST endpoints for projects and tasks, Postman collection |
+| M3: Frontend                 | `M3` | React SPA with Tailwind theme, login/register, sidebar, task board, custom modals, validation and toast feedback                       |
+| M4: DevOps and documentation | `M4` | Dockerfiles, Docker Compose, clean-clone test and final documentation                                                                  |
+
+### Branch strategy
+
+Development was done on the `main` branch with small, frequent commits following the Conventional Commits style (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`). Each completed milestone is marked with an annotated Git tag, so every delivery stage can be inspected in the history.
+
+### Task breakdown
+
+Work was tracked on the Kanban board (`Todo`, `In Progress`, `Done`) with one card per task, grouped by milestone (M0 to M4).
