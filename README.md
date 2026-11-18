@@ -1,5 +1,7 @@
 # TaskNova: Professional Workflow Manager
 
+**Documentation (Google Doc):** https://docs.google.com/document/d/1UxzWjl-XfmcdVDGrc3_9XTSgEbD47PnfaTrzOTQ8tt8/edit?usp=sharing
+
 ## 1. Project Title
 
 **TaskNova: Professional Workflow Manager**
