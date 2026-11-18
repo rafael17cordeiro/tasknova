@@ -26,7 +26,7 @@ Software engineering students, IT professionals, project teams, and individual u
 - **Code readability and maintainability:** The code follows a modular structure (separate folders for routes, controllers, middleware and configuration), uses meaningful names and is committed in small, descriptive steps.
 - **Input validation:** All user input is validated on the client side (forms) and on the server side (API) before being processed or stored.
 - **Error handling:** The backend uses `try/catch` with correct HTTP status codes (200, 201, 400, 401, 404, 500). The frontend shows clear feedback to the user through toast notifications and never uses `window.alert` or `window.confirm`.
-- **Responsive UI:** The interface adapts to desktop, tablet and mobile screens using Tailwind CSS.
+- **Responsive UI:** The login and registration pages adapt to different screen sizes using Tailwind CSS. The dashboard (sidebar and task board) is designed for desktop screens and is not fully adapted to small mobile screens.
 - **Basic security:** Passwords are hashed with `bcryptjs`, authentication uses JSON Web Tokens (JWT), protected routes require a valid token, SQL queries are parameterized to prevent SQL injection, and secrets are stored in environment variables (`.env`) that are never committed to the repository.
 - **Docker support:** The whole application (frontend, backend and database) runs in containers orchestrated with Docker Compose.
 - **GitHub repository:** The source code is hosted in a public GitHub repository, with frequent commits and a Kanban project board.
@@ -187,6 +187,8 @@ The frontend was tested manually in the browser, following each core functionali
 
 No automated unit or integration tests were written. Adding them (for example Jest with Supertest for the API and Vitest with React Testing Library for the frontend) is listed under future improvements.
 
+- The dashboard is optimized for desktop screens; the fixed-width sidebar is not adapted to mobile devices.
+
 ## 13. Final Documentation
 
 ### Purpose
@@ -234,3 +236,4 @@ TaskNova helps individuals and small teams organize their work into projects and
 - Password reset by email and rate limiting
 - Dark mode toggle
 - Deployment to a cloud provider with HTTPS
+- Fully responsive dashboard (collapsible sidebar on small screens)
